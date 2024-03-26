@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io"
+	"os"
 )
 
 // Tower of Hanoi
@@ -16,4 +17,8 @@ func TowerOfHanoi(w io.Writer, n int, from, aux, to string) {
 	fmt.Fprintf(w, "Disk %d moved from %s to %s.\n", n, from, to)
 
 	TowerOfHanoi(w, n-1, aux, from, to)
+}
+
+func main() {
+	TowerOfHanoi(os.Stdout, 2, "A", "B", "C")
 }
