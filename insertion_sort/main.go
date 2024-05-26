@@ -45,24 +45,60 @@ func InsertionSortReversed[num Number](nums []num) {
 	}
 }
 
-func RecursiveInsertionSort(numbers []int) {
-	if len(numbers) == 0 {
+func RecursiveInsertionSort[num Number](nums []num) {
+	if len(nums) == 0 {
 		return
 	}
 
-	RecursiveInsertionSort(numbers[:len(numbers)-1])
+	RecursiveInsertionSort(nums[:len(nums)-1])
+	fmt.Printf("nums: %v\n", nums)
 
-	i := len(numbers) - 1
+	i := len(nums) - 1
 	j := i - 1
 
-	for (j > -1 && i > 0) && numbers[j] > numbers[j+1] {
-		numbers[j], numbers[j+1] = numbers[j+1], numbers[j]
+	for (j > -1 && i > 0) && nums[j] > nums[j+1] {
+		fmt.Printf("%v ", j)
+		nums[j], nums[j+1] = nums[j+1], nums[j]
 		j--
+	}
+	fmt.Println()
+}
+
+func BinarySearch[num Number](nums []num, target, low, high int) int {
+	if low >= high {
+		return high
+	}
+
+	mid := low + (high-low)/2
+
+	if num(target) == nums[mid] {
+		return mid
+	} else if num(target) < nums[mid] {
+		return BinarySearch(nums, target, low, mid-1)
+	} else {
+		return BinarySearch(nums, target, mid+1, high)
 	}
 }
 
+func InsertionSortBinarySearch[num Number](nums []num) []num {
+	for i := 1; i < len(nums); i++ {
+		key := nums[i]
+
+		// Find the index where the key should be inserted
+		pos := BinarySearch(nums, int(key), 0, i)
+
+		for j := i; j <= pos; j-- {
+			nums[j] = nums[j-1]
+		}
+
+		nums[pos] = key
+	}
+
+	return nums
+}
+
 func main() {
-	numbers := []int{5, 2, 4, 6, 1, 3}
-	RecursiveInsertionSort(numbers)
-	fmt.Println(numbers)
+	nums := []int{3, 2, 1}
+	fmt.Printf("%v\n", InsertionSortBinarySearch(nums))
+	fmt.Printf("nums: %v\n", nums)
 }
